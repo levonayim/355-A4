@@ -8,7 +8,7 @@ var x = d3.time.scale().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
 
 //COLOUR RANGE
-var colorScale = d3.scale.category20()
+var color = d3.scale.category10();
 
 // DEFINES AXIS DETAILS
 var xAxis = d3.svg.axis().scale(x)
@@ -25,9 +25,6 @@ var svg = d3.select("body")
         .attr("transform", 
               "translate(" + margin.left + "," + margin.top + ")");
 
-// ARRAY FOR LEGEND
-var bins = ["Renters", "Owners"]
-
 // IMPORTING DATA (CSV FILE)
 d3.csv("data2.csv", function(error, data) {
     data.forEach(function(d) {
@@ -42,36 +39,16 @@ d3.csv("data2.csv", function(error, data) {
     svg.selectAll("dot")
         .data(data)
       .enter().append("circle")
-        .attr("r", 3.5)
-        .attr("cx", function(d) { return x(d.income); })
-        .attr("cy", function(d) { return y(d.owner); });
+        .attr("r", 8) // how big the circles will be
+        .attr("cx", function(d) { return x(+d.income); })
+        .attr("cy", function(d) { return y(+d.owner); })
+        .attr("id", function(d) { return d.cities;})
+    .style("fill", function(d) { return color(d.cities); })
 
 
-// // LEGEND LABELS 
-// // the legend color guide
-//   var legend = svg.selectAll("rect")
-//       .data(bins)
-//     .enter().append("rect")
-//     .attr({
-//       x: function(d, i) { return (40 + i*80); },
-//       y: height,
-//       width: 25,
-//       height: 12
-//     })
-//     .attr("transform", 
-//               "translate(" + margin.bottom + ")")
 
-//     .style("fill", function(d) { return d; });
 
-//     //legend labels
-//     svg.selectAll("text")
-//       .data(bins)
-//     .enter().append("text")
-//     .attr({
-//     x: function(d, i) { return (40 + i*80); },
-//     y: height + 24,
-//     })
-//     .text(function(d) { return d; });
+
 
 //CREATE AXIS
     // X-AXIS
@@ -102,8 +79,6 @@ d3.csv("data2.csv", function(error, data) {
             .attr("y", 16) //how far away the small text should be from the axis line
             .style("text-anchor", "end")
             .text("Income");
-
-
 
 
 
