@@ -4,7 +4,7 @@ var margin = {top: 30, right: 50, bottom: 50, left: 70},
     height = 550 - margin.top - margin.bottom;
 
 // SET RANGES OF SCALE
-var x = d3.time.scale().range([0, width]);
+var x = d3.scale.linear().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
 
 //COLOUR RANGE
@@ -16,6 +16,9 @@ var xAxis = d3.svg.axis().scale(x)
 var yAxis = d3.svg.axis().scale(y)
     .orient("left").ticks(10);
 
+// array of the regions, used for the legend
+var bins = ["Asia", "Europe", "Middle East", "N. America", "S. America", "Sub-Saharan Africa"]
+
 // ADD SVG TO BODY OF HTML TO DISPLAY
 var svg = d3.select("body")
     .append("svg")
@@ -24,6 +27,7 @@ var svg = d3.select("body")
     .append("g")
         .attr("transform", 
               "translate(" + margin.left + "," + margin.top + ")");
+
 
 // IMPORTING DATA (CSV FILE)
 d3.csv("data2.csv", function(error, data) {
@@ -49,7 +53,6 @@ d3.csv("data2.csv", function(error, data) {
 
 
 
-
 //CREATE AXIS
     // X-AXIS
     // appends 'g' element to the SVG. g is used to group SVG shapes together
@@ -67,7 +70,7 @@ d3.csv("data2.csv", function(error, data) {
             .attr("x", width)
             .attr("y", -8) //how far away the small text should be from the axis line
             .style("text-anchor", "end")
-            .text("Shelter Cost");
+            .text("Income");
     
     // Y-AXIS
     svg.append("g")
@@ -78,8 +81,6 @@ d3.csv("data2.csv", function(error, data) {
             .attr("transform", "rotate(-90)") //rotate text to y-axis to read
             .attr("y", 16) //how far away the small text should be from the axis line
             .style("text-anchor", "end")
-            .text("Income");
-
-
+            .text("Shelter Cost");
 
 });
