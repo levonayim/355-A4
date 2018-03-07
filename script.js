@@ -16,8 +16,6 @@ var xAxis = d3.svg.axis().scale(x)
 var yAxis = d3.svg.axis().scale(y)
     .orient("left").ticks(10);
 
-// array of the regions, used for the legend
-var bins = ["Asia", "Europe", "Middle East", "N. America", "S. America", "Sub-Saharan Africa"]
 
 // ADD SVG TO BODY OF HTML TO DISPLAY
 var svg = d3.select("body")
