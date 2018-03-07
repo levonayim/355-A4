@@ -28,6 +28,9 @@ var svg = d3.select("body")
         .attr("transform", 
               "translate(" + margin.left + "," + margin.top + ")");
 
+// group that will contain all of the plots
+    var groups = svg.append("g").attr("transform", "translate(" + margin.l + "," + margin.t + ")");
+
 
 // IMPORTING DATA (CSV FILE)
 d3.csv("data2.csv", function(error, data) {
@@ -40,7 +43,8 @@ d3.csv("data2.csv", function(error, data) {
     y.domain([0, d3.max(data, function(d) { return d.owner; })]);
 
     // Add the scatterplot
-    svg.selectAll("dot")
+    var circles =
+    groups.selectAll("dot")
         .data(data)
       .enter().append("circle")
         .attr("r", 8) // how big the circles will be
@@ -50,6 +54,29 @@ d3.csv("data2.csv", function(error, data) {
     .style("fill", function(d) { return color(d.cities); })
 
 
+////MOUSE OVER/OFF FUNCTIONS
+    // mouse over
+    var mouseOn = function() { 
+        var circle = d3.select(this);
+
+    // transition to increase size/opacity of bubble
+        circle.transition()
+        .duration(800).style("opacity", 1)
+        .attr("r", 16).ease("elastic");
+
+    // mouse off
+    var mouseOff = function() {
+        var circle = d3.select(this);
+
+        // original size
+        circle.transition()
+        .duration(800).style("opacity", .5)
+        .attr("r", 8).ease("elastic");
+    };
+
+    // call function
+    circles.on("mouseover", mouseOn);
+    circles.on("mouseout", mouseOff);
 
 
 
@@ -62,7 +89,7 @@ d3.csv("data2.csv", function(error, data) {
         .call((xAxis)   
             .ticks(20) // set details on their ticks on x-axis
             .tickSubdivide(true)
-            .tickSize(6, 3, 0)
+            .tickSize(10, 10, 0)
             .orient("bottom")) 
 
         .append("text")
