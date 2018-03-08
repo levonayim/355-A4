@@ -1,10 +1,13 @@
 //SETS BOUNDS for the chart (axis)
 var margin = {top: 30, right: 50, bottom: 50, left: 70},
-    width = 1000 - margin.left - margin.right,
+    width = 1200 - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
 // SET RANGES OF SCALE
 var x = d3.scale.linear().range([0, width]);
+// var x = d3.scale.ordinal()
+//     .domain(["Under $10k", "$10k to $19,999", "$20k to $29,999", "$30k to $39,999", "$40k to $49,999", "$50k to $59,999", "$60k to $69,999", "$70k to $79,999", "$80k to $89,999", "$90k to $99,999", "$100k and over"])
+//     .rangePoints([0, width]);
 var y = d3.scale.linear().range([height, 0]);
 
 //COLOUR RANGE
@@ -27,7 +30,7 @@ var svg = d3.select("body")
               "translate(" + margin.left + "," + margin.top + ")");
 
 // group that will contain all of the plots
-    var groups = svg.append("g").attr("transform", "translate(" + margin.l + "," + margin.t + ")");
+    var groups = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 //tool tip for when user hovers over dots, display information
     var tooltip = d3.select('body')
@@ -37,19 +40,20 @@ var svg = d3.select("body")
 
 
 // IMPORTING DATA (CSV FILE)
-d3.csv("data2.csv", function(error, data) {
+d3.csv("data.csv", function(error, data) {
     data.forEach(function(d) {
         d.income = +d.income;
-        d.owner = +d.owner;
+        d.fraction = +d.fraction;
     });
     // Scale the range of the data
     x.domain(d3.extent(data, function(d) { return d.income; }));
-    y.domain([0, d3.max(data, function(d) { return d.owner; })]);
+   //x.domain(["Under $10k", "$10k to $19,999", "$20k to $29,999", "$30k to $39,999", "$40k to $49,999", "$50k to $59,999", "$60k to $69,999", "$70k to $79,999", "$80k to $89,999", "$90k to $99,999", "$100k and over"])
+    y.domain([0, d3.max(data, function(d) { return d.fraction; })]);
 
 
     // PRINT IN CONSOLE ALL THE DATA
     // sort data alphabetically
-    data.sort(function(a, b) { return d3.ascending(a.cities, b.cities); })
+    data.sort(function(a, b) { return d3.ascending(a.GEO_NAME, b.GEO_NAME); })
     console.log(data) 
 
     // Add the scatterplot
@@ -57,16 +61,15 @@ d3.csv("data2.csv", function(error, data) {
     groups.selectAll("dot")
         .data(data)
       .enter().append("circle")
-        .attr("r", 8) // how big the circles will be
+        .attr("r", 3) // how big the circles will be
         .attr("cx", function(d) { return x(+d.income); })
-        .attr("cy", function(d) { return y(+d.owner); })
-        .attr("id", function(d) { return d.cities;})
-    .style("fill", function(d) { return color(d.cities); })
+        .attr("cy", function(d) { return y(+d.fraction); })
+        .attr("id", function(d) { return d.GEO_NAME;})
+    .style("fill", function(d) { return color(d.GEO_NAME); })
     
 
 
 //INTERACTIONS
-
     // mouse over functionality
     var mouseOn = function() { 
         var circle = d3.select(this);
@@ -83,7 +86,7 @@ d3.csv("data2.csv", function(error, data) {
         // go back to original size and opacity
         circle.transition()
         .duration(800).style("opacity", 1)
-        .attr("r", 8).ease("elastic");
+        .attr("r",3).ease("elastic");
 
     };
 
@@ -99,8 +102,9 @@ d3.csv("data2.csv", function(error, data) {
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
+        .attr("font-size","9px")
         .call((xAxis)   
-            .ticks(20) // set details on their ticks on x-axis
+            .ticks(10) // set details on their ticks on x-axis
             .tickSubdivide(true)
             .tickSize(10, 10, 0)
             .orient("bottom")) 
@@ -108,9 +112,11 @@ d3.csv("data2.csv", function(error, data) {
         .append("text")
             .attr("class", "label")
             .attr("x", width)
+            .attr("font-size","12px")
             .attr("y", -8) //how far away the small text should be from the axis line
             .style("text-anchor", "end")
-            .text("Income");
+            .style("font-weight", "bold")
+            .text("How much is spent on housing ($)");
     
     // Y-AXIS
     svg.append("g")
@@ -121,10 +127,11 @@ d3.csv("data2.csv", function(error, data) {
             .attr("transform", "rotate(-90)") //rotate text to y-axis to read
             .attr("y", 16) //how far away the small text should be from the axis line
             .style("text-anchor", "end")
-            .text("Shelter Cost");
+            .style("font-weight", "bold")
+            .text("Fraction of the total population spending > 30% on housing");
 
     // ADD LABELS FOR NAME OF CITIES FOR DOTS
-       var labelSpacing=10;
+       var labelSpacing= -20;
        var format=d3.format(".1f")
 
        svg.append("g")
@@ -133,16 +140,17 @@ d3.csv("data2.csv", function(error, data) {
            .enter()
            .append("text")
            //coordinates for labels of cities on top of dots
-           .attr("x",function (d){
-               return x(d['income'])+labelSpacing ;
-           })
-           .attr("y",function (d){
-               return y(d['owner'])-labelSpacing; 
+           // .attr("x",function (d){
+           //     return x(d['income'])+labelSpacing/2 ;
+           // })
+           // .attr("y",function (d){
+           //     return y(d['owner'])-labelSpacing; 
 
-           })
+           // })
            .attr("font-family","sans-serif")
-           .attr("font-size","10px")
-           .attr("fill", "#bbb")
-           .text(function (d) { return (d.cities);})
+           .attr("font-size","9px")
+           .attr("fill", "#333333")
+           //.text(function (d) { return (d.GEO_NAME);})
+           //.text(function (d) { return format(d.income)+","+format(d.fraction);}) //displays coordinate numbers
 
 });
