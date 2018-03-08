@@ -5,6 +5,8 @@ var margin = {top: 30, right: 50, bottom: 50, left: 70},
 
 // SET RANGES OF SCALE
 var x = d3.scale.linear().range([0, width]);
+
+//ACTUAL X-AXIS LABELS WE WANTED TO USE
 // var x = d3.scale.ordinal()
 //     .domain(["Under $10k", "$10k to $19,999", "$20k to $29,999", "$30k to $39,999", "$40k to $49,999", "$50k to $59,999", "$60k to $69,999", "$70k to $79,999", "$80k to $89,999", "$90k to $99,999", "$100k and over"])
 //     .rangePoints([0, width]);
@@ -30,7 +32,7 @@ var svg = d3.select("body")
               "translate(" + margin.left + "," + margin.top + ")");
 
 // group that will contain all of the plots
-    var groups = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var groups = svg.append("g").attr("transform", "translate(0)");
 
 //tool tip for when user hovers over dots, display information
     var tooltip = d3.select('body')
