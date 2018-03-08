@@ -8,7 +8,7 @@ var x = d3.scale.linear().range([0, width]);
 var y = d3.scale.linear().range([height, 0]);
 
 //COLOUR RANGE
-var color = d3.scale.category10();
+var color = d3.scale.category20();
 
 // DEFINES AXIS DETAILS
 var xAxis = d3.svg.axis().scale(x)
