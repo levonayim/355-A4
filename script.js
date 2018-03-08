@@ -60,7 +60,7 @@ d3.csv("data.csv", function(error, data) {
     groups.selectAll("dot")
         .data(data)
       .enter().append("circle")
-        .attr("r", 4) // how big the circles will be
+        .attr("r", 3) // how big the circles will be
         .attr("cx", function(d) { return x(+d.income); })
         .attr("cy", function(d) { return y(+d.fraction); })
         .attr("id", function(d) { return d.GEO_NAME;})
@@ -94,7 +94,7 @@ d3.csv("data.csv", function(error, data) {
         // go back to original size and opacity
         circle.transition()
         .duration(800).style("opacity", 1)
-        .attr("r",4).ease("elastic");
+        .attr("r",3).ease("elastic");
 
     };
 
