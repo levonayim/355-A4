@@ -77,6 +77,26 @@ d3.csv("data.csv", function(error, data) {
         circle.transition()
         .duration(800).style("opacity", 1)
         .attr("r", 16).ease("elastic");
+
+    /////DISPLAY LABEL OF COORDINATES. 
+    //commented out because it wouldnt work for just a single bubble.
+        // groups.append("g")
+        //    .selectAll("text")
+        //    .data(data)
+        //    .enter()
+        //    .append("text")
+        //    //coordinates for labels of cities on top of dots
+        //    .attr("x",function (d){
+        //        return x(d['income'])-labelSpacing*2 ;
+        //    })
+        //    .attr("y",function (d){
+        //        return y(d['fraction'])-labelSpacing; 
+
+        //    })
+        //    .attr("font-family","sans-serif")
+        //    .attr("font-size","9px")
+        //    .attr("fill", "#333333")
+        //    .text(function (d) { return format(d.income)+","+format(d.fraction);})
         
     };
     // mouse out functionality
@@ -130,27 +150,5 @@ d3.csv("data.csv", function(error, data) {
             .style("font-weight", "bold")
             .text("Fraction of the total population spending > 30% on housing");
 
-    // ADD LABELS FOR NAME OF CITIES FOR DOTS
-       var labelSpacing= -20;
-       var format=d3.format(".1f")
-
-       svg.append("g")
-           .selectAll("text")
-           .data(data)
-           .enter()
-           .append("text")
-           //coordinates for labels of cities on top of dots
-           // .attr("x",function (d){
-           //     return x(d['income'])+labelSpacing/2 ;
-           // })
-           // .attr("y",function (d){
-           //     return y(d['owner'])-labelSpacing; 
-
-           // })
-           .attr("font-family","sans-serif")
-           .attr("font-size","9px")
-           .attr("fill", "#333333")
-           //.text(function (d) { return (d.GEO_NAME);})
-           //.text(function (d) { return format(d.income)+","+format(d.fraction);}) //displays coordinate numbers
 
 });
