@@ -40,6 +40,12 @@ d3.csv("data2.csv", function(error, data) {
     x.domain(d3.extent(data, function(d) { return d.income; }));
     y.domain([0, d3.max(data, function(d) { return d.owner; })]);
 
+
+    // PRINT IN CONSOLE ALL THE DATA
+    // sort data alphabetically
+    data.sort(function(a, b) { return d3.ascending(a.cities, b.cities); })
+    console.log(data) 
+
     // Add the scatterplot
     var circles =
     groups.selectAll("dot")
@@ -52,27 +58,38 @@ d3.csv("data2.csv", function(error, data) {
     .style("fill", function(d) { return color(d.cities); })
 
 
-////MOUSE OVER/OFF FUNCTIONS
-    // mouse over
+//INTERACTIONS
+
+    // Add the tooltip container to the vis container
+              // it's invisible and its position/contents are defined during mouseover
+    var tooltip = d3.select("#vis-container").append("div")
+                  .attr("class", "tooltip")
+                  .style("opacity", 0);
+    // mouse over functionality
     var mouseOn = function() { 
         var circle = d3.select(this);
-
-    // transition to increase size/opacity of bubble
+        //increase size/opacity of bubble
         circle.transition()
         .duration(800).style("opacity", 1)
         .attr("r", 16).ease("elastic");
 
-    // mouse off
+    };
+    // mouse out functionality
     var mouseOff = function() {
         var circle = d3.select(this);
 
-        // original size
+        // go back to original size and opacity
         circle.transition()
-        .duration(800).style("opacity", .5)
+        .duration(800).style("opacity", 1)
         .attr("r", 8).ease("elastic");
+
+        tooltip.transition()
+        .duration(300) // ms
+        .style("opacity", 0);
+
     };
 
-    // call function
+    // run the mouseon/out functions
     circles.on("mouseover", mouseOn);
     circles.on("mouseout", mouseOff);
 
@@ -107,5 +124,9 @@ d3.csv("data2.csv", function(error, data) {
             .attr("y", 16) //how far away the small text should be from the axis line
             .style("text-anchor", "end")
             .text("Shelter Cost");
+
+
+
+
 
 });
