@@ -246,7 +246,7 @@ d3.csv("data.csv", function(error, data) {
             .data(allcities)
         .enter().append("rect")
         .attr({
-          x: function(d, i) { return (i*45); },//spacing for each box
+          x: function(d, i) { return (-25+i*45); },//spacing for each box
           y: height+35, //how far up/down it should be from the x-axis
           width: 15, //size of box
           height: 5
@@ -258,10 +258,10 @@ d3.csv("data.csv", function(error, data) {
             .data(allcities)
         .enter().append("text")
         .attr({
-        x: function(d, i) { return (i*45); }, //spacing for each city
+        x: function(d, i) { return (-25+ i*45); }, //spacing for each city
         y: height + 50, //how far up/down it should be from the x-axis 
         })
-        .attr("font-size","7px")
+        .attr("font-size","8px")
         .text(function(d) { return d; });
 
 
