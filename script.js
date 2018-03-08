@@ -29,6 +29,12 @@ var svg = d3.select("body")
 // group that will contain all of the plots
     var groups = svg.append("g").attr("transform", "translate(" + margin.l + "," + margin.t + ")");
 
+//tool tip for when user hovers over dots, display information
+    var tooltip = d3.select('body')
+      .append('div')
+      .attr('class', 'tooltip')
+      .style("opacity", 0);
+
 
 // IMPORTING DATA (CSV FILE)
 d3.csv("data2.csv", function(error, data) {
@@ -56,15 +62,11 @@ d3.csv("data2.csv", function(error, data) {
         .attr("cy", function(d) { return y(+d.owner); })
         .attr("id", function(d) { return d.cities;})
     .style("fill", function(d) { return color(d.cities); })
+    
 
 
 //INTERACTIONS
 
-    // Add the tooltip container to the vis container
-              // it's invisible and its position/contents are defined during mouseover
-    var tooltip = d3.select("#vis-container").append("div")
-                  .attr("class", "tooltip")
-                  .style("opacity", 0);
     // mouse over functionality
     var mouseOn = function() { 
         var circle = d3.select(this);
@@ -72,7 +74,7 @@ d3.csv("data2.csv", function(error, data) {
         circle.transition()
         .duration(800).style("opacity", 1)
         .attr("r", 16).ease("elastic");
-
+        
     };
     // mouse out functionality
     var mouseOff = function() {
@@ -82,10 +84,6 @@ d3.csv("data2.csv", function(error, data) {
         circle.transition()
         .duration(800).style("opacity", 1)
         .attr("r", 8).ease("elastic");
-
-        tooltip.transition()
-        .duration(300) // ms
-        .style("opacity", 0);
 
     };
 
@@ -125,8 +123,26 @@ d3.csv("data2.csv", function(error, data) {
             .style("text-anchor", "end")
             .text("Shelter Cost");
 
+    // ADD LABELS FOR NAME OF CITIES FOR DOTS
+       var labelSpacing=10;
+       var format=d3.format(".1f")
 
+       svg.append("g")
+           .selectAll("text")
+           .data(data)
+           .enter()
+           .append("text")
+           //coordinates for labels of cities on top of dots
+           .attr("x",function (d){
+               return x(d['income'])+labelSpacing ;
+           })
+           .attr("y",function (d){
+               return y(d['owner'])-labelSpacing; 
 
-
+           })
+           .attr("font-family","sans-serif")
+           .attr("font-size","10px")
+           .attr("fill", "#bbb")
+           .text(function (d) { return (d.cities);})
 
 });
